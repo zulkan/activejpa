@@ -3,6 +3,7 @@
  */
 package org.activejpa.enhancer;
 
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.security.CodeSource;
 
@@ -25,7 +26,8 @@ public class ActiveJpaAgentLoaderImpl {
         try {
             VirtualMachine vm = VirtualMachine.attach(pid);
             CodeSource codeSource = ActiveJpaAgent.class.getProtectionDomain().getCodeSource();
-            vm.loadAgent(codeSource.getLocation().toURI().getPath(), "");
+            String path = new File(codeSource.getLocation().toURI()).getAbsolutePath();
+            vm.loadAgent(path, "");
             vm.detach();
         } catch (Exception e) {
             throw new RuntimeException(e);
